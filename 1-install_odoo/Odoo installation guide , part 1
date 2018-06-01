@@ -1,0 +1,72 @@
+*******************************************************************************************************
+
+If you are logging in using the superuser root account, your first task should be to create a
+normal user account to use for your work, since it's considered bad practice to work
+as root . In particular, the Odoo server will refuse to run if you start it as the root .
+
+*******************************************************************************************************
+
+:/# sudo apt-get update
+:/# sudo apt-get upgrade 		# Install system updates
+:/# sudo apt-get install sudo 		# Make sure 'sudo' is installed
+
+The next set of commands will create an Odoo user:
+
+:/# sudo useradd -m -g sudo -s /bin/bash odoo 	# Create an 'odoo' user with sudo powers
+:/# sudo passwd odoo 				# Ask and set a password for the new user
+
+
+
+*******************************************************************************************************
+
+You can change Odoo to whatever username you may want. The -m option ensures its home
+directory is created. The -g sudo option adds it to the sudoers list so it can run commands
+as the root . The -s /bin/bash option sets the default shell to bash , which is nicer to use
+than the default sh .
+
+*******************************************************************************************************
+
+now let's switch user to Odoo that we just created 
+
+:/# sudo su Odoo
+
+First, make sure you are logged in as the user we created now or during the installation ,not as root.
+
+:/# whoami 					#this will print Odoo
+
+
+
+:/# sudo apt-get update && sudo apt-get upgrade 	# Install system updates
+:/# sudo apt-get install git 				# Install Git
+:/# sudo apt-get install npm 				# Install NodeJs and its package manager
+:/# sudo ln -s /usr/bin/nodejs /usr/bin/node 		# call node runs nodejs
+:/# sudo npm install -g less less-plugin-clean-css 	# Install less compiler
+
+*******************************************************************************************************
+
+Next, we need to get the Odoo source code and install all its dependencies. The Odoo
+source code includes an utility script, inside the odoo/setup directory, to help us install
+the required dependencies in a Debian/Ubuntu system:
+
+*******************************************************************************************************
+:/# sudo mkdir odoo-dev 				# Create a directory to work in
+:/# sudo chmod 777 odoo-dev				# Make sure to allow read/write permissions to this folder
+:/# cd ~/odoo-dev 					# Go into our work directory
+:/# sudo git clone https://github.com/odoo/odoo.git -b 10.0 --depth=1 # Get Odoo source code
+:/# ./odoo/setup/setup_dev.py setup_deps 		# Installs Odoo system dependencies
+:/# ./odoo/setup/setup_dev.py setup_pg 			# Installs PostgreSQL & db superuser for unix user
+
+
+
+*******************************************************************************************************
+Create alias 
+*******************************************************************************************************
+
+
+sudo gedit /etc/bash.bashrc
+
+ 
+#===================================================================
+
+alias run_odoo='cd /home/odoo/odoo-dev/odoo; ./odoo-bin'
+
